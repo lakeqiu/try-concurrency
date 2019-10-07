@@ -1,6 +1,5 @@
 package com.lakeqiu.base.design.charpter16;
 
-import java.nio.Buffer;
 
 /**
  * 真正接收异步消息的主动对象
