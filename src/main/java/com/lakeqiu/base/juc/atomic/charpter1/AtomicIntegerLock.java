@@ -10,8 +10,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author lakeqiu
  */
 public class AtomicIntegerLock {
-
-
     public static void main(String[] args) {
         AtomicIntegerLock lock = new AtomicIntegerLock();
 
@@ -40,6 +38,8 @@ public class AtomicIntegerLock {
 
     private final AtomicInteger atomicInteger = new AtomicInteger(0);
 
+    private final ThreadLocal<Thread> threadLocal = new ThreadLocal<>();
+
     /**
      * 获取锁
      */
@@ -47,6 +47,7 @@ public class AtomicIntegerLock {
         // 将值加1
         boolean success = atomicInteger.compareAndSet(0, 1);
 
+        threadLocal.set(Thread.currentThread());
         // success为false说明atomicInteger已经被线程改过，有线程获取到锁了
         if (!success){
             throw new RuntimeException("获取锁失败");
@@ -54,6 +55,10 @@ public class AtomicIntegerLock {
     }
 
     public void unLock(){
+        if (threadLocal.get() != Thread.currentThread()){
+            return;
+        }
+
         // 已经释放过锁了，不需要释放了
         if (0 == atomicInteger.get()){
             return;
