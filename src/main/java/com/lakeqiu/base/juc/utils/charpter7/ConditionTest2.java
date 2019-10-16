@@ -72,5 +72,7 @@ public class ConditionTest2 {
             lock.unlock();
         }
     }
+
+
 }
 
